@@ -28,8 +28,6 @@ public abstract class InGameMixin extends DrawableHelper {
 
     @Unique private Integer chatOffset = 0;
 
-    @Unique private Integer usableOffset = 0;
-
     @Redirect(
             method = "renderHud",
             at = @At(
@@ -93,9 +91,8 @@ public abstract class InGameMixin extends DrawableHelper {
         }
 
         int chatRangeTop = 20;
-        if (this.minecraft.currentScreen instanceof Chat) {
 
-            // Switch to inject at head to calculate the data
+        if (this.minecraft.currentScreen instanceof Chat) {
             int currentWheelDegrees = Mouse.getDWheel();
             numberOfTurns = Math.round((float)currentWheelDegrees / 120.0f);
             chatOffset = chatOffset + numberOfTurns;
@@ -106,17 +103,13 @@ public abstract class InGameMixin extends DrawableHelper {
 
             if (chatRangeTop < this.chatMessages.size()) {
                 if (this.chatMessages.size() <= (chatRangeTop + chatOffset)) {
-                    usableOffset = this.chatMessages.size() - chatRangeTop;
-                } else {
-                    usableOffset = chatOffset;
+                    chatOffset = this.chatMessages.size() - chatRangeTop;
                 }
             } else {
-                usableOffset = 0;
+                chatOffset = 0;
             }
         } else {
-            // resets the scroll
             chatOffset = 0;
-            usableOffset = 0;
         }
     }
 
@@ -129,7 +122,7 @@ public abstract class InGameMixin extends DrawableHelper {
     )
     public Object hudTweaks_renderHudChatOffset(List instance, int i) {
         if (Config.ConfigFields.enableChatScroll) {
-            return instance.get(i + usableOffset);
+            return instance.get(i + chatOffset);
         } else {
             return instance.get(i);
         }
