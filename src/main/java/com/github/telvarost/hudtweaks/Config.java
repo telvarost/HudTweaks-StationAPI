@@ -11,12 +11,17 @@ public class Config {
     public static ConfigFields config = new ConfigFields();
 
     public static class ConfigFields {
-        @ConfigName("Boat Drop Fixes Enabled")
-        public static Boolean boatDropFixesEnabled = true;
+        @ConfigName("Chat Scroll Enabled")
+        public static Boolean enableChatScroll = true;
 
-        @ConfigName("Boat Speed Collision Behavior")
-        @MaxLength(3)
-        @Comment("0 = vanilla, 1 = drop boat, 2 = invincible")
-        public static Integer boatCollisionBehavior = 2;
+        @ConfigName("Chat History Size")
+        @MaxLength(4096)
+        @Comment("50 = vanilla, 200 = default")
+        public static Integer chatHistorySize = 200;
+
+        @ConfigName("Hotbar Position")
+        @MaxLength(200)
+        @Comment("0 = vanilla, 32 = xbox, 200 = top")
+        public static Integer hotbarYPositionOffset = 0;
     }
 }

@@ -1,12 +1,12 @@
 package com.github.telvarost.hudtweaks.mixin;
 
+import com.github.telvarost.hudtweaks.Config;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.InGame;
 import net.minecraft.client.gui.screen.ingame.Chat;
-import net.minecraft.client.render.entity.ItemRenderer;
 import org.lwjgl.input.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,7 +24,6 @@ public abstract class InGameMixin extends DrawableHelper {
 
     @Shadow private List chatMessages;
 
-    @Shadow private static ItemRenderer itemRenderer;
     @Unique private Integer numberOfTurns = 0;
 
     @Unique private Integer chatOffset = 0;
@@ -40,7 +39,7 @@ public abstract class InGameMixin extends DrawableHelper {
             )
     )
     private void blit0(InGame instance, int i, int j, int k, int l, int m, int n) {
-        instance.blit(i, j - 22, k, l, m, n);
+        instance.blit(i, j - Config.ConfigFields.hotbarYPositionOffset, k, l, m, n);
     }
 
     @Redirect(
@@ -52,7 +51,7 @@ public abstract class InGameMixin extends DrawableHelper {
             )
     )
     private void blit1(InGame instance, int i, int j, int k, int l, int m, int n) {
-        instance.blit(i, j - 22, k, l, m, n);
+        instance.blit(i, j - Config.ConfigFields.hotbarYPositionOffset, k, l, m, n);
     }
 
     @ModifyConstant(
@@ -60,7 +59,7 @@ public abstract class InGameMixin extends DrawableHelper {
             constant = @Constant(intValue = 32)
     )
     private int blit11(int value) {
-        return value + 22;
+        return value + Config.ConfigFields.hotbarYPositionOffset;
     }
 
     @ModifyConstant(
@@ -68,11 +67,15 @@ public abstract class InGameMixin extends DrawableHelper {
             constant = @Constant(intValue = 16, ordinal = 5)
     )
     private int blit12(int value) {
-        return value + 22;
+        return value + Config.ConfigFields.hotbarYPositionOffset;
     }
 
     @Inject(method = "renderHud", at = @At("HEAD"), cancellable = true)
     public void chatLog_renderHud(float f, boolean bl, int i, int j, CallbackInfo ci) {
+        if (!Config.ConfigFields.enableChatScroll) {
+            return;
+        }
+
         int chatRangeTop = 20;
         if (this.minecraft.currentScreen instanceof Chat) {
 
@@ -97,7 +100,6 @@ public abstract class InGameMixin extends DrawableHelper {
         } else {
             // resets the scroll
             chatOffset = 0;
-
             usableOffset = 0;
         }
     }
@@ -110,7 +112,11 @@ public abstract class InGameMixin extends DrawableHelper {
             )
     )
     public Object chatLog_renderHud(List instance, int i) {
-        return instance.get(i + usableOffset);
+        if (Config.ConfigFields.enableChatScroll) {
+            return instance.get(i + usableOffset);
+        } else {
+            return instance.get(i);
+        }
     }
 
     @ModifyConstant(
@@ -118,6 +124,6 @@ public abstract class InGameMixin extends DrawableHelper {
             constant = @Constant(intValue = 50)
     )
     public int chatLog_addChatMessageChatLimit(int value) {
-        return 200;
+        return Config.ConfigFields.chatHistorySize;
     }
 }
