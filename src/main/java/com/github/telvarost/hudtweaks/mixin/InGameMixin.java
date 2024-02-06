@@ -54,9 +54,25 @@ public abstract class InGameMixin extends DrawableHelper {
 
     @ModifyConstant(
             method = "renderHud",
-            constant = @Constant(intValue = 32)
+            constant = @Constant(intValue = 32, ordinal = 0)
     )
-    private int hudTweaks_renderHudStatusBarPositions(int value) {
+    private int hudTweaks_renderHudStatusBarPositions0(int value) {
+        return value + Config.ConfigFields.hotbarYPositionOffset;
+    }
+
+    @ModifyConstant(
+            method = "renderHud",
+            constant = @Constant(intValue = 32, ordinal = 1)
+    )
+    private int hudTweaks_renderHudStatusBarPositions1(int value) {
+        return value + Config.ConfigFields.hotbarYPositionOffset;
+    }
+
+    @ModifyConstant(
+            method = "renderHud",
+            constant = @Constant(intValue = 32, ordinal = 2)
+    )
+    private int hudTweaks_renderHudStatusBarPositions2(int value) {
         return value + Config.ConfigFields.hotbarYPositionOffset;
     }
 
