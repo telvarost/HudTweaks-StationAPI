@@ -5,6 +5,7 @@ A StationAPI mod for Minecraft Beta 1.7.3 that adds some inventory tweaks.
 # HUD Tweaks
 
 * Note that all changes can be enabled/disabled in the config menu if you have ModMenu and GlassConfigAPI.
+  * Note there is currently a bug with GlassConfigAPI where integer values need to be saved twice to take effect.
 
 ## List of Changes:
 
