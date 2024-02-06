@@ -38,7 +38,7 @@ public abstract class InGameMixin extends DrawableHelper {
                     ordinal = 0
             )
     )
-    private void blit0(InGame instance, int i, int j, int k, int l, int m, int n) {
+    private void hudTweaks_renderHudHotbarPosition(InGame instance, int i, int j, int k, int l, int m, int n) {
         instance.blit(i, j - Config.ConfigFields.hotbarYPositionOffset, k, l, m, n);
     }
 
@@ -50,7 +50,7 @@ public abstract class InGameMixin extends DrawableHelper {
                     ordinal = 1
             )
     )
-    private void blit1(InGame instance, int i, int j, int k, int l, int m, int n) {
+    private void hudTweaks_renderHudSelectedItemBorderPosition(InGame instance, int i, int j, int k, int l, int m, int n) {
         instance.blit(i, j - Config.ConfigFields.hotbarYPositionOffset, k, l, m, n);
     }
 
@@ -58,7 +58,7 @@ public abstract class InGameMixin extends DrawableHelper {
             method = "renderHud",
             constant = @Constant(intValue = 32)
     )
-    private int blit11(int value) {
+    private int hudTweaks_renderHudStatusBarPositions(int value) {
         return value + Config.ConfigFields.hotbarYPositionOffset;
     }
 
@@ -66,12 +66,28 @@ public abstract class InGameMixin extends DrawableHelper {
             method = "renderHud",
             constant = @Constant(intValue = 16, ordinal = 5)
     )
-    private int blit12(int value) {
+    private int hudTweaks_renderHudItemPositions(int value) {
         return value + Config.ConfigFields.hotbarYPositionOffset;
     }
 
+    @ModifyConstant(
+            method = "renderHud",
+            constant = @Constant(intValue = 200)
+    )
+    private int hudTweaks_renderHudChatFadeTime(int value) {
+        return (Config.ConfigFields.chatFadeTime * 2);
+    }
+
+    @ModifyConstant(
+            method = "renderHud",
+            constant = @Constant(doubleValue = 200.0)
+    )
+    private double hudTweaks_renderHudChatFadeTimeDivisor(double value) {
+        return (Config.ConfigFields.chatFadeTime * 2);
+    }
+
     @Inject(method = "renderHud", at = @At("HEAD"), cancellable = true)
-    public void chatLog_renderHud(float f, boolean bl, int i, int j, CallbackInfo ci) {
+    public void hudTweaks_renderHudChatScroll(float f, boolean bl, int i, int j, CallbackInfo ci) {
         if (!Config.ConfigFields.enableChatScroll) {
             return;
         }
@@ -111,7 +127,7 @@ public abstract class InGameMixin extends DrawableHelper {
                     target = "Ljava/util/List;get(I)Ljava/lang/Object;"
             )
     )
-    public Object chatLog_renderHud(List instance, int i) {
+    public Object hudTweaks_renderHudChatOffset(List instance, int i) {
         if (Config.ConfigFields.enableChatScroll) {
             return instance.get(i + usableOffset);
         } else {
@@ -123,7 +139,7 @@ public abstract class InGameMixin extends DrawableHelper {
             method = "addChatMessage",
             constant = @Constant(intValue = 50)
     )
-    public int chatLog_addChatMessageChatLimit(int value) {
+    public int chatLog_addChatMessageLimit(int value) {
         return Config.ConfigFields.chatHistorySize;
     }
 }

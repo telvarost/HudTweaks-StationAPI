@@ -10,7 +10,7 @@ A StationAPI mod for Minecraft Beta 1.7.3 that adds some inventory tweaks.
 
 * Increased chat history size.
 * Ability to scroll up/down in chat history.
-* Ability to change message fade time.
+* Ability to change chat message fade time.
 * Ability to move hotbar up/down on screen.
 
 ## Installation using Prism Launcher

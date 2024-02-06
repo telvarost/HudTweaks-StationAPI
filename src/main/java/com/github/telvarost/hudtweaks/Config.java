@@ -11,13 +11,18 @@ public class Config {
     public static ConfigFields config = new ConfigFields();
 
     public static class ConfigFields {
-        @ConfigName("Chat Scroll Enabled")
+        @ConfigName("Allow Chat Scroll")
         public static Boolean enableChatScroll = true;
 
         @ConfigName("Chat History Size")
         @MaxLength(4096)
-        @Comment("50 = vanilla, 200 = default")
-        public static Integer chatHistorySize = 200;
+        @Comment("50 = vanilla, 100 = default")
+        public static Integer chatHistorySize = 100;
+
+        @ConfigName("Chat Message Fade Time")
+        @MaxLength(32000)
+        @Comment("100 = vanilla, 10 = 1 second")
+        public static Integer chatFadeTime = 100;
 
         @ConfigName("Hotbar Position")
         @MaxLength(200)
