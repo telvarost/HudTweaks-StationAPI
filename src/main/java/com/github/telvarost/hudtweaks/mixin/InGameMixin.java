@@ -37,7 +37,7 @@ public abstract class InGameMixin extends DrawableHelper {
             )
     )
     private void hudTweaks_renderHudHotbarPosition(InGame instance, int i, int j, int k, int l, int m, int n) {
-        instance.blit(i, j - Config.ConfigFields.hotbarYPositionOffset, k, l, m, n);
+        instance.blit(i, j - Config.config.hotbarYPositionOffset, k, l, m, n);
     }
 
     @Redirect(
@@ -49,7 +49,7 @@ public abstract class InGameMixin extends DrawableHelper {
             )
     )
     private void hudTweaks_renderHudSelectedItemBorderPosition(InGame instance, int i, int j, int k, int l, int m, int n) {
-        instance.blit(i, j - Config.ConfigFields.hotbarYPositionOffset, k, l, m, n);
+        instance.blit(i, j - Config.config.hotbarYPositionOffset, k, l, m, n);
     }
 
     @ModifyConstant(
@@ -57,7 +57,7 @@ public abstract class InGameMixin extends DrawableHelper {
             constant = @Constant(intValue = 32, ordinal = 0)
     )
     private int hudTweaks_renderHudStatusBarPositions0(int value) {
-        return value + Config.ConfigFields.hotbarYPositionOffset;
+        return value + Config.config.hotbarYPositionOffset;
     }
 
     @ModifyConstant(
@@ -65,7 +65,7 @@ public abstract class InGameMixin extends DrawableHelper {
             constant = @Constant(intValue = 32, ordinal = 1)
     )
     private int hudTweaks_renderHudStatusBarPositions1(int value) {
-        return value + Config.ConfigFields.hotbarYPositionOffset;
+        return value + Config.config.hotbarYPositionOffset;
     }
 
     @ModifyConstant(
@@ -73,7 +73,7 @@ public abstract class InGameMixin extends DrawableHelper {
             constant = @Constant(intValue = 32, ordinal = 2)
     )
     private int hudTweaks_renderHudStatusBarPositions2(int value) {
-        return value + Config.ConfigFields.hotbarYPositionOffset;
+        return value + Config.config.hotbarYPositionOffset;
     }
 
     @ModifyConstant(
@@ -81,7 +81,7 @@ public abstract class InGameMixin extends DrawableHelper {
             constant = @Constant(intValue = 16, ordinal = 5)
     )
     private int hudTweaks_renderHudItemPositions(int value) {
-        return value + Config.ConfigFields.hotbarYPositionOffset;
+        return value + Config.config.hotbarYPositionOffset;
     }
 
     @ModifyConstant(
@@ -89,7 +89,7 @@ public abstract class InGameMixin extends DrawableHelper {
             constant = @Constant(intValue = 200)
     )
     private int hudTweaks_renderHudChatFadeTime(int value) {
-        return (Config.ConfigFields.chatFadeTime * 2);
+        return (Config.config.chatFadeTime * 2);
     }
 
     @ModifyConstant(
@@ -97,12 +97,12 @@ public abstract class InGameMixin extends DrawableHelper {
             constant = @Constant(doubleValue = 200.0)
     )
     private double hudTweaks_renderHudChatFadeTimeDivisor(double value) {
-        return (Config.ConfigFields.chatFadeTime * 2);
+        return (Config.config.chatFadeTime * 2);
     }
 
     @Inject(method = "renderHud", at = @At("HEAD"), cancellable = true)
     public void hudTweaks_renderHudChatScroll(float f, boolean bl, int i, int j, CallbackInfo ci) {
-        if (!Config.ConfigFields.enableChatScroll) {
+        if (!Config.config.enableChatScroll) {
             return;
         }
 
@@ -133,11 +133,25 @@ public abstract class InGameMixin extends DrawableHelper {
             method = "renderHud",
             at = @At(
                     value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/InGame;blit(IIIIII)V",
+                    ordinal = 2
+            )
+    )
+    public void hudTweaks_renderCursor(InGame instance, int i, int j, int k, int l, int m, int n) {
+        if (!Config.config.disableCrosshair) {
+            instance.blit(i, j, k, l, m, n);
+        }
+    }
+
+    @Redirect(
+            method = "renderHud",
+            at = @At(
+                    value = "INVOKE",
                     target = "Ljava/util/List;get(I)Ljava/lang/Object;"
             )
     )
     public Object hudTweaks_renderHudChatOffset(List instance, int i) {
-        if (Config.ConfigFields.enableChatScroll) {
+        if (Config.config.enableChatScroll) {
             return instance.get(i + chatOffset);
         } else {
             return instance.get(i);
@@ -149,6 +163,6 @@ public abstract class InGameMixin extends DrawableHelper {
             constant = @Constant(intValue = 50)
     )
     public int chatLog_addChatMessageLimit(int value) {
-        return Config.ConfigFields.chatHistorySize;
+        return Config.config.chatHistorySize;
     }
 }
