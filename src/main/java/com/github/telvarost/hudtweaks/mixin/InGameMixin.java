@@ -1,12 +1,14 @@
 package com.github.telvarost.hudtweaks.mixin;
 
 import com.github.telvarost.hudtweaks.Config;
+import com.github.telvarost.hudtweaks.CoordinateDisplayEnum;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.InGame;
 import net.minecraft.client.gui.screen.ingame.Chat;
+import net.minecraft.client.render.TextRenderer;
 import org.lwjgl.input.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -15,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
+import java.util.Random;
 
 @Mixin(InGame.class)
 @Environment(value= EnvType.CLIENT)
@@ -24,6 +27,7 @@ public abstract class InGameMixin extends DrawableHelper {
 
     @Shadow private List chatMessages;
 
+    @Shadow private Random rand;
     @Unique private Integer numberOfTurns = 0;
 
     @Unique private Integer chatOffset = 0;
@@ -140,6 +144,63 @@ public abstract class InGameMixin extends DrawableHelper {
     public void hudTweaks_renderCursor(InGame instance, int i, int j, int k, int l, int m, int n) {
         if (!Config.config.disableCrosshair) {
             instance.blit(i, j, k, l, m, n);
+        }
+    }
+
+    @Redirect(
+            method = "renderHud",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/InGame;drawTextWithShadow(Lnet/minecraft/client/render/TextRenderer;Ljava/lang/String;III)V",
+                    ordinal = 2
+            )
+    )
+    public void hudTweaks_renderDrawCoordinate_X(InGame instance, TextRenderer textRenderer, String s, int i, int j, int k) {
+        if (CoordinateDisplayEnum.HIDE == Config.config.coordinateDisplay) {
+            instance.drawTextWithShadow(textRenderer, "", i, j, k);
+        } else if (CoordinateDisplayEnum.RANDOMIZE == Config.config.coordinateDisplay) {
+            double randVal = rand.nextDouble(-10000, 10000);
+            instance.drawTextWithShadow(textRenderer, "x: " + randVal, i, j, k);
+        } else {
+            instance.drawTextWithShadow(textRenderer, s, i, j, k);
+        }
+    }
+
+    @Redirect(
+            method = "renderHud",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/InGame;drawTextWithShadow(Lnet/minecraft/client/render/TextRenderer;Ljava/lang/String;III)V",
+                    ordinal = 3
+            )
+    )
+    public void hudTweaks_renderDrawCoordinate_Y(InGame instance, TextRenderer textRenderer, String s, int i, int j, int k) {
+        if (CoordinateDisplayEnum.HIDE == Config.config.coordinateDisplay) {
+            instance.drawTextWithShadow(textRenderer, "", i, j, k);
+        } else if (CoordinateDisplayEnum.RANDOMIZE == Config.config.coordinateDisplay) {
+            double randVal = rand.nextDouble(-10000, 10000);
+            instance.drawTextWithShadow(textRenderer, "y: " + randVal, i, j, k);
+        } else {
+            instance.drawTextWithShadow(textRenderer, s, i, j, k);
+        }
+    }
+
+    @Redirect(
+            method = "renderHud",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/InGame;drawTextWithShadow(Lnet/minecraft/client/render/TextRenderer;Ljava/lang/String;III)V",
+                    ordinal = 4
+            )
+    )
+    public void hudTweaks_renderDrawCoordinate_Z(InGame instance, TextRenderer textRenderer, String s, int i, int j, int k) {
+        if (CoordinateDisplayEnum.HIDE == Config.config.coordinateDisplay) {
+            instance.drawTextWithShadow(textRenderer, "", i, j, k);
+        } else if (CoordinateDisplayEnum.RANDOMIZE == Config.config.coordinateDisplay) {
+            double randVal = rand.nextDouble(-10000, 10000);
+            instance.drawTextWithShadow(textRenderer, "z: " + randVal, i, j, k);
+        } else {
+            instance.drawTextWithShadow(textRenderer, s, i, j, k);
         }
     }
 

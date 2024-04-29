@@ -27,6 +27,9 @@
     ],
     "gcapi": [
       "com.github.telvarost.hudtweaks.Config"
+    ],
+    "gcapi:factory_provider": [
+      "com.github.telvarost.hudtweaks.CoordinateDisplayEnumFactory"
     ]
   },
   "mixins": [

@@ -24,6 +24,9 @@ public class Config {
         @Comment("100 = vanilla, 10 = 1 second")
         public Integer chatFadeTime = 100;
 
+        @ConfigName("Coordinate Display For Debug Overlay")
+        public CoordinateDisplayEnum coordinateDisplay = CoordinateDisplayEnum.SHOW;
+
         @ConfigName("Disable Crosshair")
         public Boolean disableCrosshair = false;
 
