@@ -81,7 +81,11 @@ public abstract class InGameMixin extends DrawContext {
             constant = @Constant(intValue = 32, ordinal = 0)
     )
     private int hudTweaks_renderStatusBarPositions0(int value) {
-        return value + Config.config.hotbarYPositionOffset;
+        if (Config.config.putStatusBarIconsBelowHotbar) {
+            return (value + Config.config.hotbarYPositionOffset) - 33;
+        } else {
+            return value + Config.config.hotbarYPositionOffset;
+        }
     }
 
     @ModifyConstant(
@@ -89,7 +93,11 @@ public abstract class InGameMixin extends DrawContext {
             constant = @Constant(intValue = 32, ordinal = 1)
     )
     private int hudTweaks_renderStatusBarPositions1(int value) {
-        return value + Config.config.hotbarYPositionOffset;
+        if (Config.config.putStatusBarIconsBelowHotbar) {
+            return (value + Config.config.hotbarYPositionOffset) - 50;
+        } else {
+            return value + Config.config.hotbarYPositionOffset;
+        }
     }
 
     @ModifyConstant(
@@ -97,7 +105,11 @@ public abstract class InGameMixin extends DrawContext {
             constant = @Constant(intValue = 32, ordinal = 2)
     )
     private int hudTweaks_renderStatusBarPositions2(int value) {
-        return value + Config.config.hotbarYPositionOffset;
+        if (Config.config.putStatusBarIconsBelowHotbar) {
+            return (value + Config.config.hotbarYPositionOffset) - 50;
+        } else {
+            return value + Config.config.hotbarYPositionOffset;
+        }
     }
 
     @ModifyConstant(
@@ -113,7 +125,11 @@ public abstract class InGameMixin extends DrawContext {
             constant = @Constant(intValue = -4)
     )
     private int hudTweaks_renderOverlayMessagePosition(int value) {
-        return value - Config.config.hotbarYPositionOffset;
+        if (Config.config.putItemSelectionTooltipBelowHotbar) {
+            return (value - Config.config.hotbarYPositionOffset) + 74;
+        } else {
+            return value - Config.config.hotbarYPositionOffset;
+        }
     }
 
     @ModifyConstant(

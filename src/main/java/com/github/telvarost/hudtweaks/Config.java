@@ -39,8 +39,14 @@ public class Config {
         public Integer hotbarItemSelectionFadeTime = 40;
 
         @ConfigName("Hotbar Position")
-        @MaxLength(200)
-        @Comment("0 = vanilla, 32 = xbox, 200 = top")
+        @MaxLength(218)
+        @Comment("0 = vanilla, 32 = xbox, 218 = top")
         public Integer hotbarYPositionOffset = 0;
+
+        @ConfigName("Put Item Selection Tooltip Below Hotbar")
+        public Boolean putItemSelectionTooltipBelowHotbar = false;
+
+        @ConfigName("Put Status Bar Icons Below Hotbar")
+        public Boolean putStatusBarIconsBelowHotbar = false;
     }
 }

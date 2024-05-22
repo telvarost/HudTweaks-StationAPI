@@ -15,7 +15,9 @@ A StationAPI mod for Minecraft Beta 1.7.3 that adds some HUD tweaks.
 * Ability to disable rendering the crosshair.
 * Ability to enable hotbar item selection tooltips.
 * Ability to change hotbar item selection tooltip fade time.
+* Ability to put hotbar item selection tooltips below hotbar.
 * Ability to move hotbar up/down on screen.
+* Ability to put status icons below hotbar.
 
 ## Installation using Prism Launcher
 
