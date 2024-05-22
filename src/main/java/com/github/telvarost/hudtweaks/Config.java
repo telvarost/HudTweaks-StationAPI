@@ -30,6 +30,14 @@ public class Config {
         @ConfigName("Disable Crosshair")
         public Boolean disableCrosshair = false;
 
+        @ConfigName("Enable Hotbar Item Selection Tooltips")
+        public Boolean enableHotbarItemSelectionTooltips = false;
+
+        @ConfigName("Hotbar Item Selection Fade Time")
+        @MaxLength(32000)
+        @Comment("40 = default")
+        public Integer hotbarItemSelectionFadeTime = 40;
+
         @ConfigName("Hotbar Position")
         @MaxLength(200)
         @Comment("0 = vanilla, 32 = xbox, 200 = top")

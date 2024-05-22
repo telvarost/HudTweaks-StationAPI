@@ -11,6 +11,9 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.resource.language.TranslationStorage;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Mouse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -26,13 +29,14 @@ import java.util.Random;
 public abstract class InGameMixin extends DrawContext {
 
     @Shadow private Minecraft minecraft;
-
     @Shadow private List messages;
-
     @Shadow private Random random;
-    @Unique private Integer numberOfTurns = 0;
+    @Shadow private int overlayRemaining;
+    @Shadow private String overlayMessage;
 
-    @Unique private Integer chatOffset = 0;
+    @Unique private int numberOfTurns = 0;
+    @Unique private int chatOffset = 0;
+    @Unique private int prevSelectedSlot = 0;
 
     @Redirect(
             method = "render",
@@ -55,6 +59,20 @@ public abstract class InGameMixin extends DrawContext {
             )
     )
     private void hudTweaks_renderSelectedItemBorderPosition(InGameHud instance, int i, int j, int k, int l, int m, int n) {
+
+        if (Config.config.enableHotbarItemSelectionTooltips) {
+            PlayerInventory playerInventory = this.minecraft.player.inventory;
+            if (prevSelectedSlot != playerInventory.selectedSlot) {
+                prevSelectedSlot = playerInventory.selectedSlot;
+                ItemStack selectedItemStack = playerInventory.getSelectedItem();
+                if (null != selectedItemStack) {
+                    TranslationStorage translationStorage = TranslationStorage.getInstance();
+                    this.overlayMessage = translationStorage.get(selectedItemStack.getTranslationKey() + ".name");
+                    this.overlayRemaining = Config.config.hotbarItemSelectionFadeTime;
+                }
+            }
+        }
+
         instance.drawTexture(i, j - Config.config.hotbarYPositionOffset, k, l, m, n);
     }
 
