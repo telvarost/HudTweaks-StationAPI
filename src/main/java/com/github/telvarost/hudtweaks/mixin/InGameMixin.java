@@ -110,6 +110,14 @@ public abstract class InGameMixin extends DrawContext {
 
     @ModifyConstant(
             method = "render",
+            constant = @Constant(intValue = -4)
+    )
+    private int hudTweaks_renderOverlayMessagePosition(int value) {
+        return value - Config.config.hotbarYPositionOffset;
+    }
+
+    @ModifyConstant(
+            method = "render",
             constant = @Constant(intValue = 200)
     )
     private int hudTweaks_renderChatFadeTime(int value) {
