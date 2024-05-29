@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.class_564;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -15,6 +16,7 @@ import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -174,6 +176,24 @@ public abstract class InGameMixin extends DrawContext {
             }
         } else {
             chatOffset = 0;
+        }
+    }
+
+    @Inject(method = "render", at = @At("RETURN"), cancellable = true)
+    public void hudTweaks_render(float f, boolean bl, int i, int j, CallbackInfo ci) {
+        if (Config.config.drawXboxXAndYButtons) {
+            class_564 var5 = new class_564(this.minecraft.options, this.minecraft.displayWidth, this.minecraft.displayHeight);
+            //int var6 = var5.method_1857();
+            int var7 = var5.method_1858();
+            GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, minecraft.textureManager.getTextureId("/assets/hudtweaks/button_icons.png"));
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            drawTexture(10, var7 - 30, (2 % 12) * 20, (2 / 12) * 20, 20, 20);
+            TextRenderer var8 = this.minecraft.textRenderer;
+            var8.drawWithShadow("Crafting", 31, var7 - 24, 16777215);
+            GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, minecraft.textureManager.getTextureId("/assets/hudtweaks/button_icons.png"));
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            drawTexture(78, var7 - 30, (3 % 12) * 20, (3 / 12) * 20, 20, 20);
+            var8.drawWithShadow("Inventory", 99, var7 - 24, 16777215);
         }
     }
 

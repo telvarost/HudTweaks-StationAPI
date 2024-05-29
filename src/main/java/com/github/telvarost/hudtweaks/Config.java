@@ -30,6 +30,9 @@ public class Config {
         @ConfigName("Disable Crosshair")
         public Boolean disableCrosshair = false;
 
+        @ConfigName("Draw Xbox X And Y Buttons")
+        public Boolean drawXboxXAndYButtons = false;
+
         @ConfigName("Enable Hotbar Item Selection Tooltips")
         public Boolean enableHotbarItemSelectionTooltips = false;
 
