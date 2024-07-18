@@ -42,7 +42,7 @@ public class Config {
         public Integer hotbarItemSelectionFadeTime = 40;
 
         @ConfigName("Hotbar Position")
-        @MaxLength(218)
+        @MaxLength(32000)
         @Comment("0 = vanilla, 32 = xbox, 218 = top")
         public Integer hotbarYPositionOffset = 0;
 
