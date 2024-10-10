@@ -6,13 +6,13 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.class_564;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.resource.language.TranslationStorage;
+import net.minecraft.client.util.ScreenScaler;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Mouse;
@@ -182,9 +182,9 @@ public abstract class InGameMixin extends DrawContext {
     @Inject(method = "render", at = @At("RETURN"), cancellable = true)
     public void hudTweaks_render(float f, boolean bl, int i, int j, CallbackInfo ci) {
         if (Config.config.drawXboxXAndYButtons) {
-            class_564 var5 = new class_564(this.minecraft.options, this.minecraft.displayWidth, this.minecraft.displayHeight);
+            ScreenScaler var5 = new ScreenScaler(this.minecraft.options, this.minecraft.displayWidth, this.minecraft.displayHeight);
             //int var6 = var5.method_1857();
-            int var7 = var5.method_1858();
+            int var7 = var5.getScaledHeight();
             GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, minecraft.textureManager.getTextureId("/assets/hudtweaks/button_icons.png"));
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             drawTexture(10, var7 - 30, (2 % 12) * 20, (2 / 12) * 20, 20, 20);
