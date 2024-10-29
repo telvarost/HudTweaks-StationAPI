@@ -25,10 +25,10 @@
     ],
     "stationapi:event_bus_server": [
     ],
-    "gcapi": [
+    "gcapi3": [
       "com.github.telvarost.hudtweaks.Config"
     ],
-    "gcapi:factory_provider": [
+    "gcapi3:factory_provider": [
       "com.github.telvarost.hudtweaks.CoordinateDisplayEnumFactory"
     ]
   },
@@ -37,7 +37,13 @@
   ],
 
   "depends": {
-    "minecraft": "1.0.0-beta.7.3"
+    "minecraft": "1.0.0-beta.7.3",
+    "gcapi3": ">=3.0.1",
+    "stationapi": "*"
+  },
+
+  "recommends": {
+    "modmenu": "*"
   },
 
   "custom": {
