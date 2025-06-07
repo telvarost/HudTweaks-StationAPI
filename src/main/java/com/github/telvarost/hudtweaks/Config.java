@@ -34,7 +34,10 @@ public class Config {
         @ConfigEntry(name = "Draw Xbox X And Y Buttons")
         public Boolean drawXboxXAndYButtons = false;
 
-        @ConfigEntry(name = "Enable Experimental Fix For Raised Hotbar")
+        @ConfigEntry(
+                name = "Enable Experimental Fix For Raised Hotbar",
+                description = "For fixing blocks rendering over chat messages"
+        )
         public Boolean enableExperimentalFixForRaisedHotbar = false;
 
         @ConfigEntry(name = "Enable Hotbar Item Selection Tooltips")
