@@ -36,7 +36,7 @@ public class Config {
 
         @ConfigEntry(
                 name = "Enable Experimental Fix For Raised Hotbar",
-                description = "For fixing blocks rendering over chat messages"
+                description = "For fixing blocks rendering over messages"
         )
         public Boolean enableExperimentalFixForRaisedHotbar = false;
 
