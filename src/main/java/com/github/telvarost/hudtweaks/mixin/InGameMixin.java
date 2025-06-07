@@ -36,11 +36,13 @@ public abstract class InGameMixin extends DrawContext {
     @Shadow private int overlayRemaining;
     @Shadow private String overlayMessage;
 
+    @Shadow protected abstract void renderHotbarItem(int slot, int x, int y, float f);
+
     @Unique private int numberOfTurns = 0;
     @Unique private int chatOffset = 0;
     @Unique private int prevSelectedSlot = 0;
 
-    @Redirect(
+    @WrapOperation(
             method = "render",
             at = @At(
                     value = "INVOKE",
@@ -48,11 +50,11 @@ public abstract class InGameMixin extends DrawContext {
                     ordinal = 0
             )
     )
-    private void hudTweaks_renderHotbarPosition(InGameHud instance, int i, int j, int k, int l, int m, int n) {
-        instance.drawTexture(i, j - Config.config.hotbarYPositionOffset, k, l, m, n);
+    private void hudTweaks_renderHotbarPosition(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+        original.call(instance, x, y - Config.config.hotbarYPositionOffset, u, v, width, height);
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render",
             at = @At(
                     value = "INVOKE",
@@ -60,7 +62,7 @@ public abstract class InGameMixin extends DrawContext {
                     ordinal = 1
             )
     )
-    private void hudTweaks_renderSelectedItemBorderPosition(InGameHud instance, int i, int j, int k, int l, int m, int n) {
+    private void hudTweaks_renderSelectedItemBorderPosition(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
 
         if (Config.config.enableHotbarItemSelectionTooltips) {
             PlayerInventory playerInventory = this.minecraft.player.inventory;
@@ -75,7 +77,7 @@ public abstract class InGameMixin extends DrawContext {
             }
         }
 
-        instance.drawTexture(i, j - Config.config.hotbarYPositionOffset, k, l, m, n);
+        original.call(instance, x, y - Config.config.hotbarYPositionOffset, u, v, width, height);
     }
 
     @ModifyConstant(
@@ -205,15 +207,15 @@ public abstract class InGameMixin extends DrawContext {
                     ordinal = 2
             )
     )
-    private void hudTweaks_renderCursor(InGameHud instance, int i, int j, int k, int l, int m, int n, Operation<Void> original) {
+    private void hudTweaks_renderCursor(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
         if (!Config.config.disableCrosshair) {
-            original.call(instance, i, j, k, l, m, n);
+            original.call(instance, x, y, u, v, width, height);
         } else {
             original.call(instance, 0, 0, 0, 0, 0, 0);
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render",
             at = @At(
                     value = "INVOKE",
@@ -221,18 +223,18 @@ public abstract class InGameMixin extends DrawContext {
                     ordinal = 2
             )
     )
-    public void hudTweaks_renderDrawCoordinate_X(InGameHud instance, TextRenderer textRenderer, String s, int i, int j, int k) {
+    public void hudTweaks_renderDrawCoordinate_X(InGameHud instance, TextRenderer textRenderer, String s, int i, int j, int k, Operation<Void> original) {
         if (CoordinateDisplayEnum.HIDE == Config.config.coordinateDisplay) {
-            instance.drawTextWithShadow(textRenderer, "", i, j, k);
+            original.call(instance, textRenderer, "", i, j, k);
         } else if (CoordinateDisplayEnum.RANDOMIZE == Config.config.coordinateDisplay) {
             double randomVal = random.nextDouble(-10000, 10000);
-            instance.drawTextWithShadow(textRenderer, "x: " + randomVal, i, j, k);
+            original.call(instance, textRenderer, "x: " + randomVal, i, j, k);
         } else {
-            instance.drawTextWithShadow(textRenderer, s, i, j, k);
+            original.call(instance, textRenderer, s, i, j, k);
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render",
             at = @At(
                     value = "INVOKE",
@@ -240,18 +242,18 @@ public abstract class InGameMixin extends DrawContext {
                     ordinal = 3
             )
     )
-    public void hudTweaks_renderDrawCoordinate_Y(InGameHud instance, TextRenderer textRenderer, String s, int i, int j, int k) {
+    public void hudTweaks_renderDrawCoordinate_Y(InGameHud instance, TextRenderer textRenderer, String s, int i, int j, int k, Operation<Void> original) {
         if (CoordinateDisplayEnum.HIDE == Config.config.coordinateDisplay) {
-            instance.drawTextWithShadow(textRenderer, "", i, j, k);
+            original.call(instance, textRenderer, "", i, j, k);
         } else if (CoordinateDisplayEnum.RANDOMIZE == Config.config.coordinateDisplay) {
             double randomVal = random.nextDouble(-10000, 10000);
-            instance.drawTextWithShadow(textRenderer, "y: " + randomVal, i, j, k);
+            original.call(instance, textRenderer, "y: " + randomVal, i, j, k);
         } else {
-            instance.drawTextWithShadow(textRenderer, s, i, j, k);
+            original.call(instance, textRenderer, s, i, j, k);
         }
     }
 
-    @Redirect(
+    @WrapOperation(
             method = "render",
             at = @At(
                     value = "INVOKE",
@@ -259,29 +261,44 @@ public abstract class InGameMixin extends DrawContext {
                     ordinal = 4
             )
     )
-    public void hudTweaks_renderDrawCoordinate_Z(InGameHud instance, TextRenderer textRenderer, String s, int i, int j, int k) {
+    public void hudTweaks_renderDrawCoordinate_Z(InGameHud instance, TextRenderer textRenderer, String s, int i, int j, int k, Operation<Void> original) {
         if (CoordinateDisplayEnum.HIDE == Config.config.coordinateDisplay) {
-            instance.drawTextWithShadow(textRenderer, "", i, j, k);
+            original.call(instance, textRenderer, "", i, j, k);
         } else if (CoordinateDisplayEnum.RANDOMIZE == Config.config.coordinateDisplay) {
             double randomVal = random.nextDouble(-10000, 10000);
-            instance.drawTextWithShadow(textRenderer, "z: " + randomVal, i, j, k);
+            original.call(instance, textRenderer, "z: " + randomVal, i, j, k);
         } else {
-            instance.drawTextWithShadow(textRenderer, s, i, j, k);
+            original.call(instance, textRenderer, s, i, j, k);
         }
     }
 
-    @Redirect(
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbarItem(IIIF)V"
+            )
+    )
+    public void hudTweaks_ba(InGameHud instance, int slot, int x, int y, float f, Operation<Void> original) {
+        original.call(instance, slot, x, y, f);
+
+        if (Config.config.enableExperimentalFixForRaisedHotbar) {
+            GL11.glClear(256);
+        }
+    }
+
+    @WrapOperation(
             method = "render",
             at = @At(
                     value = "INVOKE",
                     target = "Ljava/util/List;get(I)Ljava/lang/Object;"
             )
     )
-    public Object hudTweaks_renderChatOffset(List instance, int i) {
+    public Object hudTweaks_renderChatOffset(List instance, int i, Operation<Void> original) {
         if (Config.config.enableChatScroll) {
-            return instance.get(i + chatOffset);
+            return original.call(instance, i + chatOffset);
         } else {
-            return instance.get(i);
+            return original.call(instance, i);
         }
     }
 
