@@ -1,7 +1,9 @@
 package com.github.telvarost.hudtweaks.mixin;
 
 import com.github.telvarost.hudtweaks.Config;
-import com.github.telvarost.hudtweaks.CoordinateDisplayEnum;
+import com.github.telvarost.hudtweaks.enums.CoordinateDisplayEnum;
+import com.github.telvarost.hudtweaks.enums.ScreenPositionHorizontalEnum;
+import com.github.telvarost.hudtweaks.enums.ScreenPositionVerticalEnum;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.fabricmc.api.EnvType;
@@ -41,119 +43,15 @@ public abstract class InGameMixin extends DrawContext {
     @Unique private int numberOfTurns = 0;
     @Unique private int chatOffset = 0;
     @Unique private int prevSelectedSlot = 0;
-
-    @WrapOperation(
-            method = "render",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
-                    ordinal = 0
-            )
-    )
-    private void hudTweaks_renderHotbarPosition(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
-        original.call(instance, x, y - Config.config.hotbarYPositionOffset, u, v, width, height);
-    }
-
-    @WrapOperation(
-            method = "render",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
-                    ordinal = 1
-            )
-    )
-    private void hudTweaks_renderSelectedItemBorderPosition(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
-
-        if (Config.config.enableHotbarItemSelectionTooltips) {
-            PlayerInventory playerInventory = this.minecraft.player.inventory;
-            if (prevSelectedSlot != playerInventory.selectedSlot) {
-                prevSelectedSlot = playerInventory.selectedSlot;
-                ItemStack selectedItemStack = playerInventory.getSelectedItem();
-                if (null != selectedItemStack) {
-                    TranslationStorage translationStorage = TranslationStorage.getInstance();
-                    this.overlayMessage = translationStorage.get(selectedItemStack.getTranslationKey() + ".name");
-                    this.overlayRemaining = Config.config.hotbarItemSelectionFadeTime;
-                }
-            }
-        }
-
-        original.call(instance, x, y - Config.config.hotbarYPositionOffset, u, v, width, height);
-    }
-
-    @ModifyConstant(
-            method = "render",
-            constant = @Constant(intValue = 32, ordinal = 0)
-    )
-    private int hudTweaks_renderStatusBarPositions0(int value) {
-        if (Config.config.putStatusBarIconsBelowHotbar) {
-            return (value + Config.config.hotbarYPositionOffset) - 33;
-        } else {
-            return value + Config.config.hotbarYPositionOffset;
-        }
-    }
-
-    @ModifyConstant(
-            method = "render",
-            constant = @Constant(intValue = 32, ordinal = 1)
-    )
-    private int hudTweaks_renderStatusBarPositions1(int value) {
-        if (Config.config.putStatusBarIconsBelowHotbar) {
-            return (value + Config.config.hotbarYPositionOffset) - 50;
-        } else {
-            return value + Config.config.hotbarYPositionOffset;
-        }
-    }
-
-    @ModifyConstant(
-            method = "render",
-            constant = @Constant(intValue = 32, ordinal = 2)
-    )
-    private int hudTweaks_renderStatusBarPositions2(int value) {
-        if (Config.config.putStatusBarIconsBelowHotbar) {
-            return (value + Config.config.hotbarYPositionOffset) - 50;
-        } else {
-            return value + Config.config.hotbarYPositionOffset;
-        }
-    }
-
-    @ModifyConstant(
-            method = "render",
-            constant = @Constant(intValue = 16, ordinal = 5)
-    )
-    private int hudTweaks_renderItemPositions(int value) {
-        return value + Config.config.hotbarYPositionOffset;
-    }
-
-    @ModifyConstant(
-            method = "render",
-            constant = @Constant(intValue = -4)
-    )
-    private int hudTweaks_renderOverlayMessagePosition(int value) {
-        if (Config.config.putItemSelectionTooltipBelowHotbar) {
-            return (value - Config.config.hotbarYPositionOffset) + 74;
-        } else {
-            return value - Config.config.hotbarYPositionOffset;
-        }
-    }
-
-    @ModifyConstant(
-            method = "render",
-            constant = @Constant(intValue = 200)
-    )
-    private int hudTweaks_renderChatFadeTime(int value) {
-        return (Config.config.chatFadeTime * 2);
-    }
-
-    @ModifyConstant(
-            method = "render",
-            constant = @Constant(doubleValue = 200.0)
-    )
-    private double hudTweaks_renderChatFadeTimeDivisor(double value) {
-        return (Config.config.chatFadeTime * 2);
-    }
+    @Unique private int scaledWidth = 0;
+    @Unique private int scaledHeight = 0;
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    public void hudTweaks_renderChatScroll(float f, boolean bl, int i, int j, CallbackInfo ci) {
+    public void hudTweaks_renderChatScroll(float tickDelta, boolean screenOpen, int mouseX, int mouseY, CallbackInfo ci) {
+        ScreenScaler var5 = new ScreenScaler(this.minecraft.options, this.minecraft.displayWidth, this.minecraft.displayHeight);
+        scaledWidth = var5.getScaledWidth();
+        scaledHeight = var5.getScaledHeight();
+
         if (!Config.config.enableChatScroll) {
             return;
         }
@@ -181,22 +79,150 @@ public abstract class InGameMixin extends DrawContext {
         }
     }
 
-    @Inject(method = "render", at = @At("RETURN"), cancellable = true)
-    public void hudTweaks_render(float f, boolean bl, int i, int j, CallbackInfo ci) {
-        if (Config.config.drawXboxXAndYButtons) {
-            ScreenScaler var5 = new ScreenScaler(this.minecraft.options, this.minecraft.displayWidth, this.minecraft.displayHeight);
-            //int var6 = var5.method_1857();
-            int var7 = var5.getScaledHeight();
-            GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, minecraft.textureManager.getTextureId("/assets/hudtweaks/button_icons.png"));
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            drawTexture(10, var7 - 30, (2 % 12) * 20, (2 / 12) * 20, 20, 20);
-            TextRenderer var8 = this.minecraft.textRenderer;
-            var8.drawWithShadow("Crafting", 31, var7 - 24, 16777215);
-            GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, minecraft.textureManager.getTextureId("/assets/hudtweaks/button_icons.png"));
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            drawTexture(78, var7 - 30, (3 % 12) * 20, (3 / 12) * 20, 20, 20);
-            var8.drawWithShadow("Inventory", 99, var7 - 24, 16777215);
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
+                    ordinal = 0
+            )
+    )
+    private void hudTweaks_renderHotbarPosition(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+        if (Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPosition) {
+                x = 0;
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPosition) {
+                x = scaledWidth - 182;
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition) {
+                y = 0;
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition) {
+                y = scaledHeight / 2 - 22;
+            }
+
+            x += Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPositionOffset;
+
+            original.call(instance, x, y, u, v, width, height);
         }
+    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
+                    ordinal = 1
+            )
+    )
+    private void hudTweaks_renderSelectedItemBorderPosition(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+
+        if (Config.config.enableHotbarItemSelectionTooltips) {
+            PlayerInventory playerInventory = this.minecraft.player.inventory;
+            if (prevSelectedSlot != playerInventory.selectedSlot) {
+                prevSelectedSlot = playerInventory.selectedSlot;
+                ItemStack selectedItemStack = playerInventory.getSelectedItem();
+                if (null != selectedItemStack) {
+                    TranslationStorage translationStorage = TranslationStorage.getInstance();
+                    this.overlayMessage = translationStorage.get(selectedItemStack.getTranslationKey() + ".name");
+                    this.overlayRemaining = Config.config.hotbarItemSelectionFadeTime;
+                }
+            }
+        }
+
+        if (Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPosition) {
+                x = -1 + this.minecraft.player.inventory.selectedSlot * 20;
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPosition) {
+                x = scaledWidth - 183 + this.minecraft.player.inventory.selectedSlot * 20;
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition) {
+                y = -1;
+                height += 2;
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition) {
+                y = scaledHeight / 2 - 23;
+                height += 2;
+            }
+
+            x += Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPositionOffset;
+
+            original.call(instance, x, y, u, v, width, height);
+        }
+    }
+//
+//    @ModifyConstant(
+//            method = "render",
+//            constant = @Constant(intValue = 32, ordinal = 0)
+//    )
+//    private int hudTweaks_renderStatusBarPositions0(int value) {
+//        if (Config.config.putStatusBarIconsBelowHotbar) {
+//            return (value + Config.config.hotbarYPositionOffset) - 33;
+//        } else {
+//            return value + Config.config.hotbarYPositionOffset;
+//        }
+//    }
+//
+//    @ModifyConstant(
+//            method = "render",
+//            constant = @Constant(intValue = 32, ordinal = 1)
+//    )
+//    private int hudTweaks_renderStatusBarPositions1(int value) {
+//        if (Config.config.putStatusBarIconsBelowHotbar) {
+//            return (value + Config.config.hotbarYPositionOffset) - 50;
+//        } else {
+//            return value + Config.config.hotbarYPositionOffset;
+//        }
+//    }
+//
+//    @ModifyConstant(
+//            method = "render",
+//            constant = @Constant(intValue = 32, ordinal = 2)
+//    )
+//    private int hudTweaks_renderStatusBarPositions2(int value) {
+//        if (Config.config.putStatusBarIconsBelowHotbar) {
+//            return (value + Config.config.hotbarYPositionOffset) - 50;
+//        } else {
+//            return value + Config.config.hotbarYPositionOffset;
+//        }
+//    }
+//
+//    @ModifyConstant(
+//            method = "render",
+//            constant = @Constant(intValue = 16, ordinal = 5)
+//    )
+//    private int hudTweaks_renderItemPositions(int value) {
+//        return value + Config.config.hotbarYPositionOffset;
+//    }
+//
+//    @ModifyConstant(
+//            method = "render",
+//            constant = @Constant(intValue = -4)
+//    )
+//    private int hudTweaks_renderOverlayMessagePosition(int value) {
+//        if (Config.config.putItemSelectionTooltipBelowHotbar) {
+//            return (value - Config.config.hotbarYPositionOffset) + 74;
+//        } else {
+//            return value - Config.config.hotbarYPositionOffset;
+//        }
+//    }
+
+    @ModifyConstant(
+            method = "render",
+            constant = @Constant(intValue = 200)
+    )
+    private int hudTweaks_renderChatFadeTime(int value) {
+        return (Config.config.chatFadeTime * 2);
+    }
+
+    @ModifyConstant(
+            method = "render",
+            constant = @Constant(doubleValue = 200.0)
+    )
+    private double hudTweaks_renderChatFadeTimeDivisor(double value) {
+        return (Config.config.chatFadeTime * 2);
     }
 
     @WrapOperation(
@@ -279,10 +305,10 @@ public abstract class InGameMixin extends DrawContext {
                     target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbarItem(IIIF)V"
             )
     )
-    public void hudTweaks_ba(InGameHud instance, int slot, int x, int y, float f, Operation<Void> original) {
+    public void hudTweaks_hotbarBlockRendering(InGameHud instance, int slot, int x, int y, float f, Operation<Void> original) {
         original.call(instance, slot, x, y, f);
 
-        if (Config.config.enableExperimentalFixForRaisedHotbar) {
+        if (Config.config.enableHotbarBlockRenderingFix) {
             GL11.glClear(256);
         }
     }
@@ -308,5 +334,23 @@ public abstract class InGameMixin extends DrawContext {
     )
     public int chatLog_addChatMessageLimit(int value) {
         return Config.config.chatHistorySize;
+    }
+
+    @Inject(method = "render", at = @At("RETURN"), cancellable = true)
+    public void hudTweaks_render(float f, boolean bl, int i, int j, CallbackInfo ci) {
+        if (Config.config.drawXboxXAndYButtons) {
+            ScreenScaler var5 = new ScreenScaler(this.minecraft.options, this.minecraft.displayWidth, this.minecraft.displayHeight);
+            //int var6 = var5.method_1857();
+            int var7 = var5.getScaledHeight();
+            GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, minecraft.textureManager.getTextureId("/assets/hudtweaks/button_icons.png"));
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            drawTexture(10, var7 - 30, (2 % 12) * 20, (2 / 12) * 20, 20, 20);
+            TextRenderer var8 = this.minecraft.textRenderer;
+            var8.drawWithShadow("Crafting", 31, var7 - 24, 16777215);
+            GL11.glBindTexture(3553 /* GL_TEXTURE_2D */, minecraft.textureManager.getTextureId("/assets/hudtweaks/button_icons.png"));
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            drawTexture(78, var7 - 30, (3 % 12) * 20, (3 / 12) * 20, 20, 20);
+            var8.drawWithShadow("Inventory", 99, var7 - 24, 16777215);
+        }
     }
 }
