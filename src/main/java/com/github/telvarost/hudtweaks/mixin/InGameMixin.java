@@ -87,22 +87,22 @@ public abstract class InGameMixin extends DrawContext {
                     ordinal = 0
             )
     )
-    private void hudTweaks_renderHotbarPosition(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
-        if (Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.enableVisibility) {
-            if (ScreenPositionHorizontalEnum.LEFT == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPosition) {
-                x = 0;
-            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPosition) {
-                x = scaledWidth - 182;
+    private void hudTweaks_renderHotbar(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+        if (Config.hudpositions.HOTBAR_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.HOTBAR_POSITION_CONFIG.horizontalPosition) {
+                x = (x + 91) - (scaledWidth / 2);
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.HOTBAR_POSITION_CONFIG.horizontalPosition) {
+                x = (x - 91) + (scaledWidth / 2) + (scaledWidth % 2);
             }
 
-            if (ScreenPositionVerticalEnum.TOP == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition) {
-                y = 0;
-            } else if (ScreenPositionVerticalEnum.CENTERED == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition) {
-                y = scaledHeight / 2 - 22;
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.HOTBAR_POSITION_CONFIG.verticalPosition) {
+                y = (y + 22) - (scaledHeight);
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.HOTBAR_POSITION_CONFIG.verticalPosition) {
+                y = (y + 11) - (scaledHeight / 2) - (scaledHeight % 2);
             }
 
-            x += Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPositionOffset;
-            y += Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPositionOffset;
+            x += Config.hudpositions.HOTBAR_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.HOTBAR_POSITION_CONFIG.verticalPositionOffset;
 
             original.call(instance, x, y, u, v, width, height);
         }
@@ -116,7 +116,7 @@ public abstract class InGameMixin extends DrawContext {
                     ordinal = 1
             )
     )
-    private void hudTweaks_renderSelectedItemBorderPosition(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+    private void hudTweaks_renderSelectedItemBorder(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
 
         if (Config.config.enableHotbarItemSelectionTooltips) {
             PlayerInventory playerInventory = this.minecraft.player.inventory;
@@ -131,83 +131,357 @@ public abstract class InGameMixin extends DrawContext {
             }
         }
 
-        if (Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.enableVisibility) {
-            if (ScreenPositionHorizontalEnum.LEFT == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPosition) {
+        if (Config.hudpositions.HOTBAR_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.HOTBAR_POSITION_CONFIG.horizontalPosition) {
                 x = -1 + this.minecraft.player.inventory.selectedSlot * 20;
-            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPosition) {
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.HOTBAR_POSITION_CONFIG.horizontalPosition) {
                 x = scaledWidth - 183 + this.minecraft.player.inventory.selectedSlot * 20;
             }
 
-            if (ScreenPositionVerticalEnum.TOP == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition) {
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.HOTBAR_POSITION_CONFIG.verticalPosition) {
                 y = -1;
                 height += 2;
-            } else if (ScreenPositionVerticalEnum.CENTERED == Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition) {
-                y = scaledHeight / 2 - 23;
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.HOTBAR_POSITION_CONFIG.verticalPosition) {
+                y = scaledHeight / 2 - 12;
                 height += 2;
             }
 
-            x += Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPositionOffset;
-            y += Config.config.UI_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPositionOffset;
+            x += Config.hudpositions.HOTBAR_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.HOTBAR_POSITION_CONFIG.verticalPositionOffset;
 
             original.call(instance, x, y, u, v, width, height);
         }
     }
-//
-//    @ModifyConstant(
-//            method = "render",
-//            constant = @Constant(intValue = 32, ordinal = 0)
-//    )
-//    private int hudTweaks_renderStatusBarPositions0(int value) {
-//        if (Config.config.putStatusBarIconsBelowHotbar) {
-//            return (value + Config.config.hotbarYPositionOffset) - 33;
-//        } else {
-//            return value + Config.config.hotbarYPositionOffset;
-//        }
-//    }
-//
-//    @ModifyConstant(
-//            method = "render",
-//            constant = @Constant(intValue = 32, ordinal = 1)
-//    )
-//    private int hudTweaks_renderStatusBarPositions1(int value) {
-//        if (Config.config.putStatusBarIconsBelowHotbar) {
-//            return (value + Config.config.hotbarYPositionOffset) - 50;
-//        } else {
-//            return value + Config.config.hotbarYPositionOffset;
-//        }
-//    }
-//
-//    @ModifyConstant(
-//            method = "render",
-//            constant = @Constant(intValue = 32, ordinal = 2)
-//    )
-//    private int hudTweaks_renderStatusBarPositions2(int value) {
-//        if (Config.config.putStatusBarIconsBelowHotbar) {
-//            return (value + Config.config.hotbarYPositionOffset) - 50;
-//        } else {
-//            return value + Config.config.hotbarYPositionOffset;
-//        }
-//    }
-//
-//    @ModifyConstant(
-//            method = "render",
-//            constant = @Constant(intValue = 16, ordinal = 5)
-//    )
-//    private int hudTweaks_renderItemPositions(int value) {
-//        return value + Config.config.hotbarYPositionOffset;
-//    }
-//
-//    @ModifyConstant(
-//            method = "render",
-//            constant = @Constant(intValue = -4)
-//    )
-//    private int hudTweaks_renderOverlayMessagePosition(int value) {
-//        if (Config.config.putItemSelectionTooltipBelowHotbar) {
-//            return (value - Config.config.hotbarYPositionOffset) + 74;
-//        } else {
-//            return value - Config.config.hotbarYPositionOffset;
-//        }
-//    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
+                    ordinal = 3
+            )
+    )
+    private void hudTweaks_renderArmor1(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+        if (Config.hudpositions.ARMOR_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.ARMOR_POSITION_CONFIG.horizontalPosition) {
+                x = (x + 91) - (scaledWidth / 2);
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.ARMOR_POSITION_CONFIG.horizontalPosition) {
+                x = (x - 91) + (scaledWidth / 2) + (scaledWidth % 2);
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.ARMOR_POSITION_CONFIG.verticalPosition) {
+                y = (y + 22) - (scaledHeight);
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.ARMOR_POSITION_CONFIG.verticalPosition) {
+                y = (y + 11) - (scaledHeight / 2) - (scaledHeight % 2);
+            }
+
+            x += Config.hudpositions.ARMOR_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.ARMOR_POSITION_CONFIG.verticalPositionOffset;
+
+            if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
+                y += 33;
+            }
+
+            original.call(instance, x, y, u, v, width, height);
+        }
+    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
+                    ordinal = 4
+            )
+    )
+    private void hudTweaks_renderArmor2(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+        if (Config.hudpositions.ARMOR_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.ARMOR_POSITION_CONFIG.horizontalPosition) {
+                x = (x + 91) - (scaledWidth / 2);
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.ARMOR_POSITION_CONFIG.horizontalPosition) {
+                x = (x - 91) + (scaledWidth / 2) + (scaledWidth % 2);
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.ARMOR_POSITION_CONFIG.verticalPosition) {
+                y = (y + 22) - (scaledHeight);
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.ARMOR_POSITION_CONFIG.verticalPosition) {
+                y = (y + 11) - (scaledHeight / 2) - (scaledHeight % 2);
+            }
+
+            x += Config.hudpositions.ARMOR_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.ARMOR_POSITION_CONFIG.verticalPositionOffset;
+
+            if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
+                y += 33;
+            }
+
+            original.call(instance, x, y, u, v, width, height);
+        }
+    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
+                    ordinal = 5
+            )
+    )
+    private void hudTweaks_renderArmor3(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+        if (Config.hudpositions.ARMOR_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.ARMOR_POSITION_CONFIG.horizontalPosition) {
+                x = (x + 91) - (scaledWidth / 2);
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.ARMOR_POSITION_CONFIG.horizontalPosition) {
+                x = (x - 91) + (scaledWidth / 2) + (scaledWidth % 2);
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.ARMOR_POSITION_CONFIG.verticalPosition) {
+                y = (y + 22) - (scaledHeight);
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.ARMOR_POSITION_CONFIG.verticalPosition) {
+                y = (y + 11) - (scaledHeight / 2) - (scaledHeight % 2);
+            }
+
+            x += Config.hudpositions.ARMOR_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.ARMOR_POSITION_CONFIG.verticalPositionOffset;
+
+            if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
+                y += 33;
+            }
+
+            original.call(instance, x, y, u, v, width, height);
+        }
+    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
+                    ordinal = 6
+            )
+    )
+    private void hudTweaks_renderHearts1(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+        if (Config.hudpositions.HEARTS_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPosition) {
+                x = (x + 91) - (scaledWidth / 2);
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPosition) {
+                x = (x - 91) + (scaledWidth / 2) + (scaledWidth % 2);
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPosition) {
+                y = (y + 22) - (scaledHeight);
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPosition) {
+                y = (y + 11) - (scaledHeight / 2) - (scaledHeight % 2);
+            }
+
+            x += Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPositionOffset;
+
+            if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
+                y += 33;
+            }
+
+            original.call(instance, x, y, u, v, width, height);
+        }
+    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
+                    ordinal = 7
+            )
+    )
+    private void hudTweaks_renderHearts2(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+        if (Config.hudpositions.HEARTS_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPosition) {
+                x = (x + 91) - (scaledWidth / 2);
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPosition) {
+                x = (x - 91) + (scaledWidth / 2) + (scaledWidth % 2);
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPosition) {
+                y = (y + 22) - (scaledHeight);
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPosition) {
+                y = (y + 11) - (scaledHeight / 2) - (scaledHeight % 2);
+            }
+
+            x += Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPositionOffset;
+
+            if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
+                y += 33;
+            }
+
+            original.call(instance, x, y, u, v, width, height);
+        }
+    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
+                    ordinal = 8
+            )
+    )
+    private void hudTweaks_renderHearts3(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+        if (Config.hudpositions.HEARTS_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPosition) {
+                x = (x + 91) - (scaledWidth / 2);
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPosition) {
+                x = (x - 91) + (scaledWidth / 2) + (scaledWidth % 2);
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPosition) {
+                y = (y + 22) - (scaledHeight);
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPosition) {
+                y = (y + 11) - (scaledHeight / 2) - (scaledHeight % 2);
+            }
+
+            x += Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPositionOffset;
+
+            if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
+                y += 33;
+            }
+
+            original.call(instance, x, y, u, v, width, height);
+        }
+    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
+                    ordinal = 9
+            )
+    )
+    private void hudTweaks_renderHearts4(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+        if (Config.hudpositions.HEARTS_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPosition) {
+                x = (x + 91) - (scaledWidth / 2);
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPosition) {
+                x = (x - 91) + (scaledWidth / 2) + (scaledWidth % 2);
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPosition) {
+                y = (y + 22) - (scaledHeight);
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPosition) {
+                y = (y + 11) - (scaledHeight / 2) - (scaledHeight % 2);
+            }
+
+            x += Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPositionOffset;
+
+            if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
+                y += 33;
+            }
+
+            original.call(instance, x, y, u, v, width, height);
+        }
+    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
+                    ordinal = 10
+            )
+    )
+    private void hudTweaks_renderHearts5(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+        if (Config.hudpositions.HEARTS_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPosition) {
+                x = (x + 91) - (scaledWidth / 2);
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPosition) {
+                x = (x - 91) + (scaledWidth / 2) + (scaledWidth % 2);
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPosition) {
+                y = (y + 22) - (scaledHeight);
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPosition) {
+                y = (y + 11) - (scaledHeight / 2) - (scaledHeight % 2);
+            }
+
+            x += Config.hudpositions.HEARTS_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.HEARTS_POSITION_CONFIG.verticalPositionOffset;
+
+            if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
+                y += 33;
+            }
+
+            original.call(instance, x, y, u, v, width, height);
+        }
+    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
+                    ordinal = 11
+            )
+    )
+    private void hudTweaks_renderOxygen1(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+        if (Config.hudpositions.OXYGEN_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.OXYGEN_POSITION_CONFIG.horizontalPosition) {
+                x = (x + 91) - (scaledWidth / 2);
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.OXYGEN_POSITION_CONFIG.horizontalPosition) {
+                x = (x - 91) + (scaledWidth / 2) + (scaledWidth % 2);
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.OXYGEN_POSITION_CONFIG.verticalPosition) {
+                y = (y + 22) - (scaledHeight);
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.OXYGEN_POSITION_CONFIG.verticalPosition) {
+                y = (y + 11) - (scaledHeight / 2) - (scaledHeight % 2);
+            }
+
+            x += Config.hudpositions.OXYGEN_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.OXYGEN_POSITION_CONFIG.verticalPositionOffset;
+
+            if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
+                y += 51;
+            }
+
+            original.call(instance, x, y, u, v, width, height);
+        }
+    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
+                    ordinal = 12
+            )
+    )
+    private void hudTweaks_renderOxygen2(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
+        if (Config.hudpositions.OXYGEN_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.OXYGEN_POSITION_CONFIG.horizontalPosition) {
+                x = (x + 91) - (scaledWidth / 2);
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.OXYGEN_POSITION_CONFIG.horizontalPosition) {
+                x = (x - 91) + (scaledWidth / 2) + (scaledWidth % 2);
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.OXYGEN_POSITION_CONFIG.verticalPosition) {
+                y = (y + 22) - (scaledHeight);
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.OXYGEN_POSITION_CONFIG.verticalPosition) {
+                y = (y + 11) - (scaledHeight / 2) - (scaledHeight % 2);
+            }
+
+            x += Config.hudpositions.OXYGEN_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.OXYGEN_POSITION_CONFIG.verticalPositionOffset;
+
+            if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
+                y += 51;
+            }
+
+            original.call(instance, x, y, u, v, width, height);
+        }
+    }
 
     @ModifyConstant(
             method = "render",
@@ -305,11 +579,72 @@ public abstract class InGameMixin extends DrawContext {
                     target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbarItem(IIIF)V"
             )
     )
-    public void hudTweaks_hotbarBlockRendering(InGameHud instance, int slot, int x, int y, float f, Operation<Void> original) {
-        original.call(instance, slot, x, y, f);
+    public void hudTweaks_renderHotbarItem(InGameHud instance, int slot, int x, int y, float f, Operation<Void> original) {
+        if (Config.hudpositions.HOTBAR_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.HOTBAR_POSITION_CONFIG.horizontalPosition) {
+                x = (x + 91) - (scaledWidth / 2);
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.HOTBAR_POSITION_CONFIG.horizontalPosition) {
+                x = (x - 91) + (scaledWidth / 2) + (scaledWidth % 2);
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.HOTBAR_POSITION_CONFIG.verticalPosition) {
+                y = (y + 22) - (scaledHeight);
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.HOTBAR_POSITION_CONFIG.verticalPosition) {
+                y = (y + 11) - (scaledHeight / 2) - (scaledHeight % 2);
+            }
+
+            x += Config.hudpositions.HOTBAR_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.HOTBAR_POSITION_CONFIG.verticalPositionOffset;
+
+            original.call(instance, slot, x, y, f);
+        }
+    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/render/platform/Lighting;turnOff()V"
+            )
+    )
+    public void hudTweaks_hotbarBlockRenderingFix(Operation<Void> original) {
+        original.call();
 
         if (Config.config.enableHotbarBlockRenderingFix) {
             GL11.glClear(256);
+        }
+    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lorg/lwjgl/opengl/GL11;glTranslatef(FFF)V",
+                    ordinal = 1
+            )
+    )
+    public void hudTweaks_overlayMesssagePosition(float x, float y, float z, Operation<Void> original) {
+        if (Config.hudpositions.OVERLAY_MESSAGE_POSITION_CONFIG.enableVisibility) {
+            if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.OVERLAY_MESSAGE_POSITION_CONFIG.horizontalPosition) {
+                x = (x + 91) - (scaledWidth / 2);
+            } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.OVERLAY_MESSAGE_POSITION_CONFIG.horizontalPosition) {
+                x = (x - 91) + (scaledWidth / 2) + (scaledWidth % 2);
+            }
+
+            if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.OVERLAY_MESSAGE_POSITION_CONFIG.verticalPosition) {
+                y = (y + 22) - (scaledHeight);
+            } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.OVERLAY_MESSAGE_POSITION_CONFIG.verticalPosition) {
+                y = (y + 11) - (scaledHeight / 2) - (scaledHeight % 2);
+            }
+
+            x += Config.hudpositions.OVERLAY_MESSAGE_POSITION_CONFIG.horizontalPositionOffset;
+            y += Config.hudpositions.OVERLAY_MESSAGE_POSITION_CONFIG.verticalPositionOffset;
+
+            if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
+                y += 74;
+            }
+
+            original.call(x, y, z);
         }
     }
 

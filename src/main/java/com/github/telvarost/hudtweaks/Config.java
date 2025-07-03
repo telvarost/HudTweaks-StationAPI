@@ -7,15 +7,13 @@ import net.glasslauncher.mods.gcapi3.api.*;
 
 public class Config {
 
-    @ConfigRoot(value = "config", visibleName = "HUD Tweaks")
-    public static ConfigFields config = new ConfigFields();
+    @ConfigRoot(value = "config", visibleName = "HUD Tweaks", index = 0)
+    public static final Config.ConfigFields config = new Config.ConfigFields();
+
+    @ConfigRoot(value = "hudpositions", visibleName = "HUD Positions", index = 1)
+    public static final Config.HudPositionsFields hudpositions = new Config.HudPositionsFields();
 
     public static class ConfigFields {
-        @ConfigCategory(
-                name = "In-Game UI Element Positions Config"
-        )
-        public InGameUIPositionsConfig UI_POSITIONS_CONFIG = new InGameUIPositionsConfig();
-
         @ConfigEntry(name = "Allow Chat Scroll")
         public Boolean enableChatScroll = true;
 
@@ -59,7 +57,7 @@ public class Config {
         public Integer hotbarItemSelectionFadeTime = 40;
     }
 
-    public static class InGameUIPositionsConfig {
+    public static class HudPositionsFields {
         @ConfigCategory(
                 name = "Item Hotbar Position Config"
         )
@@ -85,10 +83,16 @@ public class Config {
         )
         public OverlayMessagePositionConfig OVERLAY_MESSAGE_POSITION_CONFIG = new OverlayMessagePositionConfig();
 
-        @ConfigEntry(name = "Put Overlay Messages Below Hotbar")
+        @ConfigEntry(
+                name = "Put Overlay Messages Below Hotbar",
+                description = "Adjusts overlay text vertical offset only"
+        )
         public Boolean putOverlayMessagesBelowHotbar = false;
 
-        @ConfigEntry(name = "Put Status Bar Icons Below Hotbar")
+        @ConfigEntry(
+                name = "Put Status Bar Icons Below Hotbar",
+                description = "Adjusts status bar vertical offsets only"
+        )
         public Boolean putStatusBarIconsBelowHotbar = false;
     }
 
