@@ -117,20 +117,6 @@ public abstract class InGameMixin extends DrawContext {
             )
     )
     private void hudTweaks_renderSelectedItemBorder(InGameHud instance, int x, int y, int u, int v, int width, int height, Operation<Void> original) {
-
-        if (Config.config.enableHotbarItemSelectionTooltips) {
-            PlayerInventory playerInventory = this.minecraft.player.inventory;
-            if (prevSelectedSlot != playerInventory.selectedSlot) {
-                prevSelectedSlot = playerInventory.selectedSlot;
-                ItemStack selectedItemStack = playerInventory.getSelectedItem();
-                if (null != selectedItemStack) {
-                    TranslationStorage translationStorage = TranslationStorage.getInstance();
-                    this.overlayMessage = translationStorage.get(selectedItemStack.getTranslationKey() + ".name");
-                    this.overlayRemaining = Config.config.hotbarItemSelectionFadeTime;
-                }
-            }
-        }
-
         if (Config.hudpositions.HOTBAR_POSITION_CONFIG.enableVisibility) {
             if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.HOTBAR_POSITION_CONFIG.horizontalPosition) {
                 x = -1 + this.minecraft.player.inventory.selectedSlot * 20;
@@ -607,11 +593,24 @@ public abstract class InGameMixin extends DrawContext {
                     target = "Lnet/minecraft/client/render/platform/Lighting;turnOff()V"
             )
     )
-    public void hudTweaks_hotbarBlockRenderingFix(Operation<Void> original) {
+    public void hudTweaks_glClearAndItemSelectedTooltip(Operation<Void> original) {
         original.call();
 
         if (Config.config.enableHotbarBlockRenderingFix) {
             GL11.glClear(256);
+        }
+
+        if (Config.config.enableHotbarItemSelectionTooltips) {
+            PlayerInventory playerInventory = this.minecraft.player.inventory;
+            if (prevSelectedSlot != playerInventory.selectedSlot) {
+                prevSelectedSlot = playerInventory.selectedSlot;
+                ItemStack selectedItemStack = playerInventory.getSelectedItem();
+                if (null != selectedItemStack) {
+                    TranslationStorage translationStorage = TranslationStorage.getInstance();
+                    this.overlayMessage = translationStorage.get(selectedItemStack.getTranslationKey() + ".name");
+                    this.overlayRemaining = Config.config.hotbarItemSelectionFadeTime;
+                }
+            }
         }
     }
 
