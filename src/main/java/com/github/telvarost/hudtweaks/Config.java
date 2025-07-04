@@ -60,9 +60,14 @@ public class Config {
 
     public static class HudPositionsFields {
         @ConfigCategory(
-                name = "Positions Config"
+                name = "Advanced HUD Positions Config"
         )
-        public PositionsConfig POSITIONS_CONFIG = new PositionsConfig();
+        public AdvancedHudPositionsConfig ADVANCED_HUD_POSITIONS_CONFIG = new AdvancedHudPositionsConfig();
+
+        @ConfigCategory(
+                name = "Simple HUD Position Config"
+        )
+        public SimpleHudPositionConfig SIMPLE_HUD_POSITION_CONFIG = new SimpleHudPositionConfig();
 
         @ConfigEntry(
                 name = "HUD Positioning System",
@@ -83,12 +88,7 @@ public class Config {
         public Boolean putStatusBarIconsBelowHotbar = false;
     }
 
-    public static class PositionsConfig {
-        @ConfigCategory(
-                name = "Simple HUD Position Config"
-        )
-        public SimpleHudPositionConfig SIMPLE_HUD_POSITION_CONFIG = new SimpleHudPositionConfig();
-
+    public static class AdvancedHudPositionsConfig {
         @ConfigCategory(
                 name = "Advanced Item Hotbar Position Config"
         )

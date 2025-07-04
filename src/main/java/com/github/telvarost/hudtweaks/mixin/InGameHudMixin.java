@@ -78,24 +78,24 @@ public abstract class InGameHudMixin extends DrawContext {
             ModHelper.configUpdated = false;
 
             if (HudPositioningSystemEnum.SIMPLE == Config.hudpositions.hudPositioningSystem) {
-                if (Config.hudpositions.POSITIONS_CONFIG.SIMPLE_HUD_POSITION_CONFIG.enableVisibility) {
+                if (Config.hudpositions.SIMPLE_HUD_POSITION_CONFIG.enableVisibility) {
                     int xOffset = 0;
                     int yOffset = 0;
 
-                    if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.POSITIONS_CONFIG.SIMPLE_HUD_POSITION_CONFIG.horizontalPosition) {
+                    if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.SIMPLE_HUD_POSITION_CONFIG.horizontalPosition) {
                         xOffset = 91 - (scaledWidth / 2);
-                    } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.POSITIONS_CONFIG.SIMPLE_HUD_POSITION_CONFIG.horizontalPosition) {
+                    } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.SIMPLE_HUD_POSITION_CONFIG.horizontalPosition) {
                         xOffset = -91 + (scaledWidth / 2) + (scaledWidth % 2);
                     }
 
-                    if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.POSITIONS_CONFIG.SIMPLE_HUD_POSITION_CONFIG.verticalPosition) {
+                    if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.SIMPLE_HUD_POSITION_CONFIG.verticalPosition) {
                         yOffset = 22 - (scaledHeight);
-                    } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.POSITIONS_CONFIG.SIMPLE_HUD_POSITION_CONFIG.verticalPosition) {
+                    } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.SIMPLE_HUD_POSITION_CONFIG.verticalPosition) {
                         yOffset = 11 - (scaledHeight / 2) - (scaledHeight % 2);
                     }
 
-                    xOffset += Config.hudpositions.POSITIONS_CONFIG.SIMPLE_HUD_POSITION_CONFIG.horizontalPositionOffset;
-                    yOffset += Config.hudpositions.POSITIONS_CONFIG.SIMPLE_HUD_POSITION_CONFIG.verticalPositionOffset;
+                    xOffset += Config.hudpositions.SIMPLE_HUD_POSITION_CONFIG.horizontalPositionOffset;
+                    yOffset += Config.hudpositions.SIMPLE_HUD_POSITION_CONFIG.verticalPositionOffset;
 
                     xOffsetHotbar  = xOffset;
                     yOffsetHotbar  = yOffset;
@@ -108,8 +108,8 @@ public abstract class InGameHudMixin extends DrawContext {
                     xOffsetOverlay = xOffset;
                     yOffsetOverlay = yOffset;
 
-                    if (  (ScreenPositionVerticalEnum.TOP == Config.hudpositions.POSITIONS_CONFIG.SIMPLE_HUD_POSITION_CONFIG.verticalPosition)
-                       || (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.POSITIONS_CONFIG.SIMPLE_HUD_POSITION_CONFIG.verticalPosition)
+                    if (  (ScreenPositionVerticalEnum.TOP == Config.hudpositions.SIMPLE_HUD_POSITION_CONFIG.verticalPosition)
+                       || (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.SIMPLE_HUD_POSITION_CONFIG.verticalPosition)
                        || (0 > yOffsetHotbar)
                     ) {
                         isHotbarRaised = true;
@@ -152,24 +152,24 @@ public abstract class InGameHudMixin extends DrawContext {
                 xOffsetOverlay = 0;
                 yOffsetOverlay = 0;
 
-                if (Config.hudpositions.POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.enableVisibility) {
-                    if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPosition) {
+                if (Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.enableVisibility) {
+                    if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPosition) {
                         xOffsetHotbar = 91 - (scaledWidth / 2);
-                    } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPosition) {
+                    } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPosition) {
                         xOffsetHotbar = -91 + (scaledWidth / 2) + (scaledWidth % 2);
                     }
 
-                    if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition) {
+                    if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition) {
                         yOffsetHotbar = 22 - (scaledHeight);
-                    } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition) {
+                    } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition) {
                         yOffsetHotbar = 11 - (scaledHeight / 2) - (scaledHeight % 2);
                     }
 
-                    xOffsetHotbar += Config.hudpositions.POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPositionOffset;
-                    yOffsetHotbar += Config.hudpositions.POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPositionOffset;
+                    xOffsetHotbar += Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.horizontalPositionOffset;
+                    yOffsetHotbar += Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPositionOffset;
 
-                    if (  (ScreenPositionVerticalEnum.TOP == Config.hudpositions.POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition)
-                       || (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition)
+                    if (  (ScreenPositionVerticalEnum.TOP == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition)
+                       || (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HOTBAR_POSITION_CONFIG.verticalPosition)
                        || (0 > yOffsetHotbar)
                     ) {
                         isHotbarRaised = true;
@@ -182,21 +182,21 @@ public abstract class InGameHudMixin extends DrawContext {
                     hotbarVisibility  = false;
                 }
 
-                if (Config.hudpositions.POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.enableVisibility) {
-                    if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.horizontalPosition) {
+                if (Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.enableVisibility) {
+                    if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.horizontalPosition) {
                         xOffsetHearts = 91 - (scaledWidth / 2);
-                    } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.horizontalPosition) {
+                    } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.horizontalPosition) {
                         xOffsetHearts = -91 + (scaledWidth / 2) + (scaledWidth % 2);
                     }
 
-                    if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.verticalPosition) {
+                    if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.verticalPosition) {
                         yOffsetHearts = 22 - (scaledHeight);
-                    } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.verticalPosition) {
+                    } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.verticalPosition) {
                         yOffsetHearts = 11 - (scaledHeight / 2) - (scaledHeight % 2);
                     }
 
-                    xOffsetHearts += Config.hudpositions.POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.horizontalPositionOffset;
-                    yOffsetHearts += Config.hudpositions.POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.verticalPositionOffset;
+                    xOffsetHearts += Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.horizontalPositionOffset;
+                    yOffsetHearts += Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.HEARTS_POSITION_CONFIG.verticalPositionOffset;
 
                     if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
                         yOffsetHearts += 33;
@@ -207,21 +207,21 @@ public abstract class InGameHudMixin extends DrawContext {
                     heartsVisibility  = false;
                 }
 
-                if (Config.hudpositions.POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.enableVisibility) {
-                    if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.horizontalPosition) {
+                if (Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.enableVisibility) {
+                    if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.horizontalPosition) {
                         xOffsetArmor = 91 - (scaledWidth / 2);
-                    } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.horizontalPosition) {
+                    } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.horizontalPosition) {
                         xOffsetArmor = -91 + (scaledWidth / 2) + (scaledWidth % 2);
                     }
 
-                    if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.verticalPosition) {
+                    if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.verticalPosition) {
                         yOffsetArmor = 22 - (scaledHeight);
-                    } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.verticalPosition) {
+                    } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.verticalPosition) {
                         yOffsetArmor = 11 - (scaledHeight / 2) - (scaledHeight % 2);
                     }
 
-                    xOffsetArmor += Config.hudpositions.POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.horizontalPositionOffset;
-                    yOffsetArmor += Config.hudpositions.POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.verticalPositionOffset;
+                    xOffsetArmor += Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.horizontalPositionOffset;
+                    yOffsetArmor += Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.ARMOR_POSITION_CONFIG.verticalPositionOffset;
 
                     if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
                         yOffsetArmor += 33;
@@ -232,21 +232,21 @@ public abstract class InGameHudMixin extends DrawContext {
                     armorVisibility  = false;
                 }
 
-                if (Config.hudpositions.POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.enableVisibility) {
-                    if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.horizontalPosition) {
+                if (Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.enableVisibility) {
+                    if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.horizontalPosition) {
                         xOffsetOxygen = 91 - (scaledWidth / 2);
-                    } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.horizontalPosition) {
+                    } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.horizontalPosition) {
                         xOffsetOxygen = -91 + (scaledWidth / 2) + (scaledWidth % 2);
                     }
 
-                    if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.verticalPosition) {
+                    if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.verticalPosition) {
                         yOffsetOxygen = 22 - (scaledHeight);
-                    } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.verticalPosition) {
+                    } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.verticalPosition) {
                         yOffsetOxygen = 11 - (scaledHeight / 2) - (scaledHeight % 2);
                     }
 
-                    xOffsetOxygen += Config.hudpositions.POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.horizontalPositionOffset;
-                    yOffsetOxygen += Config.hudpositions.POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.verticalPositionOffset;
+                    xOffsetOxygen += Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.horizontalPositionOffset;
+                    yOffsetOxygen += Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OXYGEN_POSITION_CONFIG.verticalPositionOffset;
 
                     if (Config.hudpositions.putStatusBarIconsBelowHotbar) {
                         yOffsetOxygen += 51;
@@ -257,21 +257,21 @@ public abstract class InGameHudMixin extends DrawContext {
                     oxygenVisibility  = false;
                 }
 
-                if (Config.hudpositions.POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.enableVisibility) {
-                    if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.horizontalPosition) {
+                if (Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.enableVisibility) {
+                    if (ScreenPositionHorizontalEnum.LEFT == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.horizontalPosition) {
                         xOffsetOverlay = 91 - (scaledWidth / 2);
-                    } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.horizontalPosition) {
+                    } else if (ScreenPositionHorizontalEnum.RIGHT == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.horizontalPosition) {
                         xOffsetOverlay = -91 + (scaledWidth / 2) + (scaledWidth % 2);
                     }
 
-                    if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.verticalPosition) {
+                    if (ScreenPositionVerticalEnum.TOP == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.verticalPosition) {
                         yOffsetOverlay = 22 - (scaledHeight);
-                    } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.verticalPosition) {
+                    } else if (ScreenPositionVerticalEnum.CENTERED == Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.verticalPosition) {
                         yOffsetOverlay = 11 - (scaledHeight / 2) - (scaledHeight % 2);
                     }
 
-                    xOffsetOverlay += Config.hudpositions.POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.horizontalPositionOffset;
-                    yOffsetOverlay += Config.hudpositions.POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.verticalPositionOffset;
+                    xOffsetOverlay += Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.horizontalPositionOffset;
+                    yOffsetOverlay += Config.hudpositions.ADVANCED_HUD_POSITIONS_CONFIG.OVERLAY_MESSAGE_POSITION_CONFIG.verticalPositionOffset;
 
                     if (Config.hudpositions.putOverlayMessagesBelowHotbar) {
                         yOffsetOverlay += 74;
