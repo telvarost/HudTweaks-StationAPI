@@ -30,6 +30,7 @@
     ],
     "gcapi3:factory_provider": [
       "com.github.telvarost.hudtweaks.enums.CoordinateDisplayEnumFactory",
+      "com.github.telvarost.hudtweaks.enums.HudPositioningSystemEnumFactory",
       "com.github.telvarost.hudtweaks.enums.ScreenPositionHorizontalEnumFactory",
       "com.github.telvarost.hudtweaks.enums.ScreenPositionVerticalEnumFactory"
     ],

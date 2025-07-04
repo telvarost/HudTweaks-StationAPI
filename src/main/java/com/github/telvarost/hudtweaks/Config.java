@@ -1,6 +1,7 @@
 package com.github.telvarost.hudtweaks;
 
 import com.github.telvarost.hudtweaks.enums.CoordinateDisplayEnum;
+import com.github.telvarost.hudtweaks.enums.HudPositioningSystemEnum;
 import com.github.telvarost.hudtweaks.enums.ScreenPositionHorizontalEnum;
 import com.github.telvarost.hudtweaks.enums.ScreenPositionVerticalEnum;
 import net.glasslauncher.mods.gcapi3.api.*;
@@ -59,29 +60,15 @@ public class Config {
 
     public static class HudPositionsFields {
         @ConfigCategory(
-                name = "Item Hotbar Position Config"
+                name = "Positions Config"
         )
-        public ItemHotbarPositionConfig HOTBAR_POSITION_CONFIG = new ItemHotbarPositionConfig();
+        public PositionsConfig POSITIONS_CONFIG = new PositionsConfig();
 
-        @ConfigCategory(
-                name = "Hearts Position Config"
+        @ConfigEntry(
+                name = "HUD Positioning System",
+                description = "Which configs or defaults to use for the HUD"
         )
-        public HeartsPositionConfig HEARTS_POSITION_CONFIG = new HeartsPositionConfig();
-
-        @ConfigCategory(
-                name = "Armor Position Config"
-        )
-        public ArmorPositionConfig ARMOR_POSITION_CONFIG = new ArmorPositionConfig();
-
-        @ConfigCategory(
-                name = "Oxygen Position Config"
-        )
-        public OxygenPositionConfig OXYGEN_POSITION_CONFIG = new OxygenPositionConfig();
-
-        @ConfigCategory(
-                name = "Overlay Message Position Config"
-        )
-        public OverlayMessagePositionConfig OVERLAY_MESSAGE_POSITION_CONFIG = new OverlayMessagePositionConfig();
+        public HudPositioningSystemEnum hudPositioningSystem = HudPositioningSystemEnum.SIMPLE;
 
         @ConfigEntry(
                 name = "Put Overlay Messages Below Hotbar",
@@ -96,7 +83,71 @@ public class Config {
         public Boolean putStatusBarIconsBelowHotbar = false;
     }
 
-    public static class ItemHotbarPositionConfig {
+    public static class PositionsConfig {
+        @ConfigCategory(
+                name = "Simple HUD Position Config"
+        )
+        public SimpleHudPositionConfig SIMPLE_HUD_POSITION_CONFIG = new SimpleHudPositionConfig();
+
+        @ConfigCategory(
+                name = "Advanced Item Hotbar Position Config"
+        )
+        public HotbarPositionConfig HOTBAR_POSITION_CONFIG = new HotbarPositionConfig();
+
+        @ConfigCategory(
+                name = "Advanced Health Bar Position Config"
+        )
+        public HeartsPositionConfig HEARTS_POSITION_CONFIG = new HeartsPositionConfig();
+
+        @ConfigCategory(
+                name = "Advanced Armor Bar Position Config"
+        )
+        public ArmorPositionConfig ARMOR_POSITION_CONFIG = new ArmorPositionConfig();
+
+        @ConfigCategory(
+                name = "Advanced Oxygen Bar Position Config"
+        )
+        public OxygenPositionConfig OXYGEN_POSITION_CONFIG = new OxygenPositionConfig();
+
+        @ConfigCategory(
+                name = "Advanced Overlay Message Position Config"
+        )
+        public OverlayMessagePositionConfig OVERLAY_MESSAGE_POSITION_CONFIG = new OverlayMessagePositionConfig();
+    }
+
+    public static class SimpleHudPositionConfig {
+        @ConfigEntry(
+                name = "Enable Visibility"
+        )
+        public Boolean enableVisibility = true;
+
+        @ConfigEntry(
+                name = "Horizontal Position"
+        )
+        public ScreenPositionHorizontalEnum horizontalPosition = ScreenPositionHorizontalEnum.CENTERED;
+
+        @ConfigEntry(
+                name = "Horizontal Position Offset",
+                minLength = -32000,
+                maxLength = 32000
+        )
+        public Integer horizontalPositionOffset = 0;
+
+        @ConfigEntry(
+                name = "Vertical Position"
+        )
+        public ScreenPositionVerticalEnum verticalPosition = ScreenPositionVerticalEnum.BOTTOM;
+
+        @ConfigEntry(
+                name = "Vertical Position Offset",
+                description = "Use position bottom with offset -32 for Xbox",
+                minLength = -32000,
+                maxLength = 32000
+        )
+        public Integer verticalPositionOffset = 0;
+    }
+
+    public static class HotbarPositionConfig {
         @ConfigEntry(
                 name = "Enable Visibility"
         )
