@@ -29,7 +29,13 @@
       "com.github.telvarost.hudtweaks.Config"
     ],
     "gcapi3:factory_provider": [
-      "com.github.telvarost.hudtweaks.CoordinateDisplayEnumFactory"
+      "com.github.telvarost.hudtweaks.enums.CoordinateDisplayEnumFactory",
+      "com.github.telvarost.hudtweaks.enums.HudPositioningSystemEnumFactory",
+      "com.github.telvarost.hudtweaks.enums.ScreenPositionHorizontalEnumFactory",
+      "com.github.telvarost.hudtweaks.enums.ScreenPositionVerticalEnumFactory"
+    ],
+    "gcapi3:presave": [
+      "com.github.telvarost.hudtweaks.events.ConfigListener"
     ]
   },
   "mixins": [

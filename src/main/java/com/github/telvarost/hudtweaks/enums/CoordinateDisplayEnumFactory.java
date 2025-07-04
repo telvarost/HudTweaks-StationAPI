@@ -1,4 +1,4 @@
-package com.github.telvarost.hudtweaks;
+package com.github.telvarost.hudtweaks.enums;
 
 import com.google.common.collect.ImmutableMap;
 import net.glasslauncher.mods.gcapi3.api.*;

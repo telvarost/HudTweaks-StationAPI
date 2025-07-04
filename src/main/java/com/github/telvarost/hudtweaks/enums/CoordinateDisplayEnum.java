@@ -1,4 +1,4 @@
-package com.github.telvarost.hudtweaks;
+package com.github.telvarost.hudtweaks.enums;
 
 public enum CoordinateDisplayEnum {
     SHOW("Show"),

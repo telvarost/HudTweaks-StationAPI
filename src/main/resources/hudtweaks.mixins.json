@@ -8,7 +8,9 @@
   "server": [
   ],
   "client": [
-    "InGameMixin"
+    "GameMenuScreenMixin",
+    "InGameHudMixin",
+    "TitleScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

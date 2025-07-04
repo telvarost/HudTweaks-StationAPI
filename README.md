@@ -16,9 +16,11 @@ A StationAPI mod for Minecraft Beta 1.7.3 that adds some HUD tweaks.
 * Ability to draw very basic Xbox X and Y buttons.
 * Ability to enable hotbar item selection tooltips.
 * Ability to change hotbar item selection tooltip fade time.
-* Ability to put hotbar item selection tooltips below hotbar.
-* Ability to move hotbar up/down on screen.
-* Ability to put status icons below hotbar.
+* Ability to move hotbar, status icons, and overlay message anywhere on the screen.
+  * Disabled - the in-game HUD will be in the vanilla position
+  * Simple - move in-game HUD all together with a single config category
+  * Advanced - move hotbar, status icons, and overlay message independently of each other in multiple config categories
+* Ability to put status icons and/or overlay message below the hotbar.
 
 ## Installation using Prism Launcher
 
