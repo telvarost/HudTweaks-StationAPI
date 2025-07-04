@@ -1,4 +1,4 @@
-# HudTweaks StationAPI Edition for Minecraft Beta 1.7.3
+# HudTweaks StationAPI for Minecraft Beta 1.7.3
 
 A StationAPI mod for Minecraft Beta 1.7.3 that adds some HUD tweaks.
 
