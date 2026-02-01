@@ -13,6 +13,7 @@ A StationAPI mod for Minecraft Beta 1.7.3 that adds some HUD tweaks.
 * Ability to change chat message fade time.
 * Ability to disable, randomize, or show player coordinates in debug overlay.
 * Ability to disable rendering the crosshair.
+* Ability to disable rendering the vignette.
 * Ability to draw very basic Xbox X and Y buttons.
 * Ability to enable hotbar item selection tooltips.
 * Ability to change hotbar item selection tooltip fade time.

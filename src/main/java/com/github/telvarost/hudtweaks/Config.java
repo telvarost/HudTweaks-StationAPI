@@ -38,6 +38,9 @@ public class Config {
         @ConfigEntry(name = "Disable Crosshair")
         public Boolean disableCrosshair = false;
 
+        @ConfigEntry(name = "Disable Vignette")
+        public Boolean disableVignette = false;
+
         @ConfigEntry(name = "Draw Xbox X And Y Buttons")
         public Boolean drawXboxXAndYButtons = false;
 

@@ -332,6 +332,21 @@ public abstract class InGameHudMixin extends DrawContext {
             method = "render",
             at = @At(
                     value = "INVOKE",
+                    target = "Lnet/minecraft/client/Minecraft;isFancyGraphicsEnabled()Z"
+            )
+    )
+    private boolean hudTweaks_renderVignette(Operation<Boolean> original) {
+        if (Config.config.disableVignette) {
+            return false;
+        } else {
+            return original.call();
+        }
+    }
+
+    @WrapOperation(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(IIIIII)V",
                     ordinal = 0
             )
